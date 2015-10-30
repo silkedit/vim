@@ -1,0 +1,5 @@
+toolbar:
+  vim:
+    label: Vim
+  toggle_vim_emulation:
+    tooltip: Vimエミュレーションを有効/無効
