@@ -1,0 +1,9 @@
+{
+  "name": "vim",
+  "version": "0.1.0",
+  "description": "Vim emulation package",
+  "main": "index.js",
+  "repository": "silkedit/vim",
+  "author": "SilkEdit team",
+  "license": "MIT"
+}
