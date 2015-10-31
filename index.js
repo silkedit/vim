@@ -81,16 +81,18 @@ function enable() {
 }
 
 function disable() {
-	silk.removeEventFilter('keypress', keyPressHandler)
-	silk.unregisterContext("mode")
-	const view = silk.activeView();
-	if (view != null) {
-		view.setThinCursor(true)
-	}
+  silk.removeEventFilter('keypress', keyPressHandler)
+  silk.removeEventFilter('runCommand', runCommandHandler)
+  silk.removeEventFilter('focusChanged', focusChangedHandler)
+  silk.unregisterContext("mode")
+  const view = silk.activeView();
+  if (view != null) {
+    view.setThinCursor(true)
+  }
 
-	silk.windows().forEach(w => w.statusBar().clearMessage())
+  silk.windows().forEach(w => w.statusBar().clearMessage())
 
-	isEnabled = false
+  isEnabled = false
 }
 
 function onModeChanged(newMode) {
@@ -139,9 +141,13 @@ module.exports = {
 		if (silk.config.get('vim.enable_vim_emulation')) {
 			enable()
 		}
-	},
+	}
 
-	commands: {
+  ,deactivate: () => {
+    disable()
+  }
+
+	,commands: {
 		"toggle_vim_emulation": (args) => {
 			if (isEnabled) {
 				disable()
