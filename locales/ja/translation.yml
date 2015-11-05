@@ -3,3 +3,8 @@ toolbar:
     label: Vim
   toggle_vim_emulation:
     tooltip: Vimエミュレーションを有効/無効
+
+config:
+  enable_on_startup:
+    title: 起動時にVimエミュレーションを有効
+    description: 起動時にVimエミュレーションを有効

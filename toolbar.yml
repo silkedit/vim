@@ -1,4 +1,4 @@
-toolbars:
+toolbar:
 - label: Vim
   id: vim
   items:
