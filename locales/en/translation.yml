@@ -1,0 +1,9 @@
+command:
+  toggle_vim_emulation:
+    description: Toggle Vim emulation
+  command_mode:
+    description: Enter Command mode
+  commandline_mode:
+    description: Enter Command-line mode
+  insert_mode:
+    description: Enter Insert mode

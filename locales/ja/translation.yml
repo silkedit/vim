@@ -8,3 +8,13 @@ config:
   enable_on_startup:
     title: 起動時にVimエミュレーションを有効
     description: 起動時にVimエミュレーションを有効
+    
+command:
+  toggle_vim_emulation:
+    description: Vimエミュレーションを有効/無効
+  command_mode:
+    description: コマンドモードに移行
+  commandline_mode:
+    description: コマンドラインモードに移行
+  insert_mode:
+    description: インサートモードに移行

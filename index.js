@@ -70,9 +70,9 @@ function enable() {
 	silk.installEventFilter('keypress', keyPressHandler)
 	silk.installEventFilter('runCommand', runCommandHandler)
 	silk.installEventFilter('focusChanged', focusChangedHandler)
-	silk.registerContext("mode", (operator, value) => {
-		console.log('checking mode context')
-		return isEnabled && silk.contextUtils.isSatisfied(toModeText(mode), operator, value)
+	silk.registerCondition("vim.mode", (operator, value) => {
+		console.log('checking mode condition')
+		return isEnabled && silk.conditionUtils.isSatisfied(toModeText(mode), operator, value)
 	})
 	mode = MODE.CMD
 	onModeChanged(mode)
@@ -84,7 +84,7 @@ function disable() {
   silk.removeEventFilter('keypress', keyPressHandler)
   silk.removeEventFilter('runCommand', runCommandHandler)
   silk.removeEventFilter('focusChanged', focusChangedHandler)
-  silk.unregisterContext("mode")
+  silk.unregisterCondition("vim.mode")
   const view = silk.activeView();
   if (view != null) {
     view.setThinCursor(true)
@@ -148,30 +148,24 @@ module.exports = {
   }
 
 	,commands: {
-		"toggle_vim_emulation": (args) => {
+		"toggle_vim_emulation": () => {
 			if (isEnabled) {
 				disable()
 			} else {
 				enable()
 			}
 		}
-		,"change_mode": (args) => {
+		,"insert_mode": () => {
 			if (!isEnabled) return
-
-			switch(args['mode']) {
-				case 'insert':
-					setMode(MODE.INSERT)
-					break
-				case 'normal':
-					setMode(MODE.CMD)
-					break
-				case 'commandline':
-					setMode(MODE.CMDLINE)
-					break
-				default:
-					console.warn('invalid mode: ', args['mode'])
-					break
-			}
+			setMode(MODE.INSERT)
+		}
+		,"command_mode": () => {
+			if (!isEnabled) return
+			setMode(MODE.CMD)
+		}
+		,"commandline_mode": () => {
+			if (!isEnabled) return
+			setMode(MODE.CMDLINE)
 		}
 	}
 }

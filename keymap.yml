@@ -1,39 +1,23 @@
-- context: os == mac
-  keymap:
-    ctrl+cmd+i: vim.toggle_vim_emulation
-
-- context: os == windows
-  keymap:
-    ctrl+alt+i: vim.toggle_vim_emulation
-
-# Normal mode keymap
-
-- context: mode == normal
-  keymap:
-    i: { command: vim.change_mode, args: { mode: insert }}
-    'shift+:': { command: vim.change_mode, args: { mode: commandline }}
-    h: { command: move_cursor, args: { operation: left }}
-    j: { command: move_cursor, args: { operation: down }}
-    k: { command: move_cursor, args: { operation: up }}
-    l: { command: move_cursor, args: { operation: right }}
-    space: { command: move_cursor, args: { operation: right }}
-    0: { command: move_cursor, args: { operation: start_of_block }}
-    'shift+^': { command: move_cursor, args: { operation: first_non_blank_char }}
-    'shift+$': { command: move_cursor, args: { operation: last_char }}
-    enter: { command: move_cursor, args: { operation: next_line }}
-    shift++: { command: move_cursor, args: { operation: next_line }}
-    -: { command: move_cursor, args: { operation: prev_line }}
-    x: delete
-    shift+x: { command: delete, args: { direction: backward }}
-    u: undo
-    ctrl+r: redo
-    left: { command: move_cursor, args: { operation: left }}
-    down: { command: move_cursor, args: { operation: down }}
-    up: { command: move_cursor, args: { operation: up }}
-    right: { command: move_cursor, args: { operation: right }}
-
-# Insert mode keymap
-
-- context: mode == insert
-  keymap:
-    escape: { command: vim.change_mode, args: { mode: normal }}
+- { key: ctrl+cmd+i, command: vim.toggle_vim_emulation }
+- { key: i, command: vim.insert_mode, if: vim.mode == normal }
+- { key: 'shift+:', command: vim.commandline_mode, if: vim.mode == normal }
+- { key: h, command: move_cursor_left, if: vim.mode == normal }
+- { key: j, command: move_cursor_down, if: vim.mode == normal }
+- { key: k, command: move_cursor_up, if: vim.mode == normal }
+- { key: l, command: move_cursor_right, if: vim.mode == normal }
+- { key: space, command: move_cursor_right, if: vim.mode == normal }
+- { key: 0, command: move_cursor_start_of_line, if: vim.mode == normal }
+- { key: 'shift+^', command: move_cursor_first_non_blank_char, if: vim.mode == normal }
+- { key: 'shift+$', command: move_cursor_last_char, if: vim.mode == normal }
+- { key: enter, command: move_cursor_next_line, if: vim.mode == normal }
+- { key: shift++, command: move_cursor_next_line, if: vim.mode == normal }
+- { key: -, command: move_cursor_prev_line, if: vim.mode == normal }
+- { key: x, command: delete, if: vim.mode == normal }
+- { key: shift+x, command: delete_backward, if: vim.mode == normal }
+- { key: u, command: undo, if: vim.mode == normal }
+- { key: ctrl+r, command: redo, if: vim.mode == normal }
+- { key: left, command: move_cursor_left, if: vim.mode == normal }
+- { key: down, command: move_cursor_down, if: vim.mode == normal }
+- { key: up, command: move_cursor_up, if: vim.mode == normal }
+- { key: right, command: move_cursor_right, if: vim.mode == normal }
+- { key: escape, command: vim.command_mode, if: vim.mode == insert }
