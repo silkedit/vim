@@ -85,7 +85,7 @@ function disable() {
   silk.removeEventFilter('runCommand', runCommandHandler)
   silk.removeEventFilter('focusChanged', focusChangedHandler)
   silk.unregisterCondition("vim.mode")
-  const view = silk.activeView();
+  const view = silk.activeTextEditView();
   if (view != null) {
     view.setThinCursor(true)
   }
@@ -117,7 +117,7 @@ function onModeChanged(newMode) {
 }
 
 function updateCursor() {
-	const view = silk.activeView();
+	const view = silk.activeTextEditView();
 	if (view != null) {
 		const isThin = mode !== MODE.CMD
 		view.setThinCursor(isThin)
@@ -126,7 +126,7 @@ function updateCursor() {
 
 function setMode(newMode) {
 	if (mode !== newMode) {
-		const view = silk.activeView()
+		const view = silk.activeTextEditView()
 		if (newMode == MODE.CMD && view != null) {
 			view.moveCursor('left')
 		}
