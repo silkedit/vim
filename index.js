@@ -12,45 +12,30 @@ var isEnabled = false
 var mode = MODE.CMD
 var repeatCount = 0
 
-const keyPressHandler = (event) => {
-	console.log('keyPressHandler')
+const keyEventFilter = (event) => {
+  if (event.type() !== silkedit.Event.Type.KeyPress) {
+    return false;
+  }
+
 	switch (mode) {
 		case MODE.CMD:
-			if (event.key) {
-				const ch = event.key.charCodeAt(0)
-				if ((ch == "0".charCodeAt(0) && repeatCount != 0) || (ch >= "1".charCodeAt(0) && ch <= "9".charCodeAt(0))) {
-					repeatCount = repeatCount * 10 + (ch - "0".charCodeAt(0))
-					console.log('repeatCount: %d', repeatCount)
-					return true
-				}
-
+  		const key = event.key();
+  		if ((key == silkedit.Key.Key_0 && repeatCount != 0) || (key >= silkedit.Key.Key_1 && key <= silkedit.Key.Key_9)) {
+				repeatCount = repeatCount * 10 + (key - silkedit.Key.Key_0);
+				console.log('repeatCount: %d', repeatCount);
+				return true;
 			}
 			silkedit.KeymapManager.dispatch(event);
-			return true
+			return true;
 		case MODE.CMDLINE:
-			if (event.key == "Escape") {
+			if (event.key == silkedit.Key.Key_Escape) {
 				setMode(MODE.CMD)
 				return true
 			}
 			break
 	}
 
-	return false
-}
-
-const runCommandHandler = (event) => {
-	if (repeatCount > 0) {
-		event.args.repeat = repeatCount.toString()
-		repeatCount = 0
-	}
-	return false
-}
-
-const focusChangedHandler = (event) => {
-	if (event.type === 'TextEditView') {
-		mode = MODE.CMD
-		updateCursor()
-	}
+	return false;
 }
 
 function toModeText(mode) {
@@ -67,14 +52,35 @@ function toModeText(mode) {
 	}
 }
 
+function focusChangedListener(old, now) {
+ 	if (now instanceof silkedit.TextEditView) {
+ 		mode = MODE.CMD;
+ 		updateCursor();
+  }
+};
+
+function commandEventFilter(event) {
+  if (repeatCount > 0) {
+    event.args.repeat = repeatCount.toString();
+    repeatCount = 0
+  }
+	return false;
+}
+
 function enable() {
-	silkedit.installEventFilter('keypress', keyPressHandler)
-	silkedit.installEventFilter('runCommand', runCommandHandler)
-	silkedit.installEventFilter('focusChanged', focusChangedHandler)
-	silkedit.registerCondition("vim.mode", (operator, value) => {
-		console.log('checking mode condition')
-		return isEnabled && silkedit.conditionUtils.isSatisfied(toModeText(mode), operator, value)
-	})
+	silkedit.KeymapManager.addKeyEventFilter(keyEventFilter);
+  silkedit.CommandManager.addCommandEventFilter(commandEventFilter);
+
+	silkedit.App.on('focusChanged', focusChangedListener);
+	
+	const modeCond = {
+	  isSatisfied: (operator, operand) => {
+  	  return isEnabled && silkedit.Condition.check(toModeText(mode), operator, operand);
+  	}
+	}
+	
+  silkedit.ConditionManager.add("vim.mode", modeCond);
+
 	mode = MODE.CMD
 	onModeChanged(mode)
 	repeatCount = 0
@@ -82,16 +88,16 @@ function enable() {
 }
 
 function disable() {
-  silkedit.removeEventFilter('keypress', keyPressHandler)
-  silkedit.removeEventFilter('runCommand', runCommandHandler)
-  silkedit.removeEventFilter('focusChanged', focusChangedHandler)
-  silkedit.unregisterCondition("vim.mode")
-  const view = silkedit.API.activeTextEditView();
+	silkedit.KeymapManager.removeKeyEventFilter(keyEventFilter);
+  silkedit.CommandManager.removeCommandEventFilter(commandEventFilter);
+  silkedit.App.removeListener('focusChanged', focusChangedListener);
+  silkedit.ConditionManager.remove("vim.mode");
+  const view = silkedit.App.activeTextEditView();
   if (view != null) {
     view.setThinCursor(true)
   }
 
-  silkedit.API.windows().forEach(w => w.statusBar().clearMessage())
+  silkedit.Window.windows().forEach(w => w.statusBar().clearMessage())
 
   isEnabled = false
 }
@@ -109,7 +115,7 @@ function onModeChanged(newMode) {
 			return
 	}
 
-	let win = silkedit.API.activeWindow()
+	let win = silkedit.App.activeWindow()
 	if (win != null) {
 		win.statusBar().showMessage(text)
 	}
@@ -118,7 +124,7 @@ function onModeChanged(newMode) {
 }
 
 function updateCursor() {
-	const view = silkedit.API.activeTextEditView();
+	const view = silkedit.App.activeTextEditView();
 	if (view != null) {
 		const isThin = mode !== MODE.CMD
 		view.setThinCursor(isThin)
@@ -127,9 +133,9 @@ function updateCursor() {
 
 function setMode(newMode) {
 	if (mode !== newMode) {
-		const view = silkedit.API.activeTextEditView()
+		const view = silkedit.App.activeTextEditView()
 		if (newMode == MODE.CMD && view != null) {
-			view.moveCursor('left')
+			view.moveCursor('left');
 		}
 
 		mode = newMode
