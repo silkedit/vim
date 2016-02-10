@@ -25,8 +25,7 @@ const keyEventFilter = (event) => {
 				console.log('repeatCount: %d', repeatCount);
 				return true;
 			}
-			silkedit.KeymapManager.dispatch(event);
-			return true;
+			return silkedit.KeymapManager.dispatch(event);
 		case MODE.CMDLINE:
 			if (event.key == silkedit.Key.Key_Escape) {
 				setMode(MODE.CMD)
