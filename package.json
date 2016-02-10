@@ -1,6 +1,6 @@
 {
   "name": "vim",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Vim emulation package",
   "main": "index.js",
   "repository": "silkedit/vim",

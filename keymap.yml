@@ -1,5 +1,5 @@
-- { key: ctrl+cmd+i, command: vim.toggle_vim_emulation, if: onMac }
-- { key: ctrl+alt+i, command: vim.toggle_vim_emulation, if: onWindows }
+- { key: ctrl+cmd+i, command: vim.toggle_vim_emulation, if: on_mac }
+- { key: ctrl+alt+i, command: vim.toggle_vim_emulation, if: on_windows }
 - { key: i, command: vim.insert_mode, if: vim.mode == normal }
 - { key: 'shift+:', command: vim.commandline_mode, if: vim.mode == normal }
 - { key: h, command: move_cursor_left, if: vim.mode == normal }
