@@ -19,6 +19,10 @@ var isEnabled = false
 var mode = MODE.CMD
 var repeatCount = 0
 
+const enabledCond = {
+  keyValue: () => isEnabled
+}
+
 const keyEventFilter = (event) => {
   if (event.type() !== silkedit.Event.Type.KeyPress || !(silkedit.App.focusWidget() instanceof silkedit.TextEditView)) {
     return false;
@@ -86,11 +90,9 @@ function enable() {
 	silkedit.App.on('focusChanged', focusChangedListener);
 	
 	const modeCond = {
-	  isSatisfied: (operator, operand) => {
-  	  return isEnabled && silkedit.Condition.check(toModeText(mode), operator, operand);
-  	}
+	  keyValue: () => toModeText(mode)
 	}
-	
+
   silkedit.Condition.add("vim.mode", modeCond);
 
 	mode = MODE.CMD
@@ -232,6 +234,7 @@ function moveCursor(operation, repeat) {
 
 module.exports = {
 	activate: () => {
+    silkedit.Condition.add("vim.enabled", enabledCond);
 		if (silkedit.Config.get('vim.enable_on_startup')) {
 			enable()
 		}
@@ -242,6 +245,8 @@ module.exports = {
   }
 
 	,commands: {
+		"enable_vim": () => enable(),
+		"disable_vim": () => disable(),
 		"toggle_vim_emulation": () => {
 			if (isEnabled) {
 				disable()

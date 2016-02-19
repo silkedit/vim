@@ -1,0 +1,11 @@
+menu:
+- id: packages
+  menu:
+  - label: 'Enable Vim'
+    id: enable_vim
+    command: vim.enable_vim
+    if: vim.enabled == false
+  - label: 'Disable Vim'
+    id: disable_vim
+    command: vim.disable_vim
+    if: vim.enabled

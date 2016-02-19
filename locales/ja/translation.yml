@@ -18,3 +18,9 @@ command:
     description: コマンドラインモードに移行
   insert_mode:
     description: インサートモードに移行
+    
+menu:
+  enable_vim:
+    label: Vimエミュレーションを有効
+  disable_vim:
+    label: Vimエミュレーションを無効
