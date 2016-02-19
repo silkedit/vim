@@ -1,8 +1,0 @@
-toolbar:
-- label: Vim
-  id: vim
-  items:
-  - icon: resources/icon32x32.png
-    command: vim.toggle_vim_emulation
-    tooltip: "Toggle Vim emulation"
-    id: toggle_vim_emulation
