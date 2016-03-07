@@ -1,6 +1,6 @@
 toolbar:
   vim:
-    label: Vim
+    title: Vim
   toggle_vim_emulation:
     tooltip: Vimエミュレーションを有効/無効
 
@@ -8,7 +8,7 @@ config:
   enable_on_startup:
     title: 起動時にVimエミュレーションを有効
     description: 起動時にVimエミュレーションを有効
-    
+
 command:
   toggle_vim_emulation:
     description: Vimエミュレーションを有効/無効
@@ -18,9 +18,9 @@ command:
     description: コマンドラインモードに移行
   insert_mode:
     description: インサートモードに移行
-    
+
 menu:
   enable_vim:
-    label: Vimエミュレーションを有効
+    title: Vimエミュレーションを有効
   disable_vim:
-    label: Vimエミュレーションを無効
+    title: Vimエミュレーションを無効
