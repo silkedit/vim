@@ -1,9 +1,14 @@
 {
   "name": "vim",
-  "version": "0.1.12",
-  "description": "Vim emulation package",
+  "version": "0.1.13",
+  "description": "Vim emulation",
   "main": "index.js",
   "repository": "silkedit/vim",
   "author": "SilkEdit team",
-  "license": "MIT"
+  "license": "MIT",
+  "locales": {
+    "ja_JP": {
+      "description": "Vimエミュレーション"
+    }
+  }
 }
