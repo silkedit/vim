@@ -24,7 +24,7 @@ const enabledCond = {
 }
 
 const keyEventFilter = (event) => {
-  if (event.type() !== silkedit.Event.Type.KeyPress || !(silkedit.App.focusWidget() instanceof silkedit.TextEditView)) {
+  if (event.type() !== silkedit.Event.Type.KeyPress || !(silkedit.App.focusWidget() instanceof silkedit.TextEdit)) {
     return false;
   }
 
@@ -36,7 +36,7 @@ const keyEventFilter = (event) => {
 				console.log('repeatCount: %d', repeatCount);
 				return true;
 			}
-			
+
 			if (key === silkedit.Key.Key_Return || key === silkedit.Key.Key_Enter) {
 			  moveCursor(MoveOperation.NextLine);
 			} else {
@@ -69,7 +69,7 @@ function toModeText(mode) {
 }
 
 function focusChangedListener(old, now) {
- 	if (now instanceof silkedit.TextEditView) {
+  if (now instanceof silkedit.TextEdit) {
  		mode = MODE.CMD;
  		updateCursor();
   }
@@ -88,7 +88,7 @@ function enable() {
   silkedit.CommandManager.addCommandEventFilter(commandEventFilter);
 
 	silkedit.App.on('focusChanged', focusChangedListener);
-	
+
 	const modeCond = {
 	  keyValue: () => toModeText(mode)
 	}
@@ -106,7 +106,7 @@ function disable() {
   silkedit.CommandManager.removeCommandEventFilter(commandEventFilter);
   silkedit.App.removeListener('focusChanged', focusChangedListener);
   silkedit.Condition.remove("vim.mode");
-  const view = silkedit.App.activeTextEditView();
+  const view = silkedit.App.activeTextEdit();
   if (view != null) {
     view.setThinCursor(true)
   }
@@ -138,7 +138,7 @@ function onModeChanged(newMode) {
 }
 
 function updateCursor() {
-	const view = silkedit.App.activeTextEditView();
+	const view = silkedit.App.activeTextEdit();
 	if (view != null) {
 		const isThin = mode !== MODE.CMD
 		view.setThinCursor(isThin)
@@ -147,7 +147,7 @@ function updateCursor() {
 
 function setMode(newMode) {
 	if (mode !== newMode) {
-		const view = silkedit.App.activeTextEditView();
+		const view = silkedit.App.activeTextEdit();
 		if (newMode == MODE.CMD && view != null) {
 			moveCursor(silkedit.TextCursor.MoveOperation.Left, 1);
 		}
@@ -181,10 +181,10 @@ function moveToFirstNonBlankChar(cur) {
 
 
 function moveCursor(operation, repeat) {
-  const editView = silkedit.App.activeTextEditView();
-  if (editView != null) {
+  const textEdit = silkedit.App.activeTextEdit();
+  if (textEdit != null) {
     repeat = typeof repeat === 'number' ? repeat : 1;
-    const cursor = editView.textCursor();
+    const cursor = textEdit.textCursor();
     const pos = cursor.position();
     const block = cursor.block();
     const blockPos = block.position();
@@ -200,7 +200,7 @@ function moveCursor(operation, repeat) {
           return;  // new line or EOF only
         let endpos = blockPos + blockText.length;
         // If the cursor is block mode, don't allow it to move at EOL
-        if (!editView.isThinCursor()) {
+        if (!textEdit.isThinCursor()) {
           endpos -= 1;
         }
         if (pos >= endpos)
@@ -228,7 +228,7 @@ function moveCursor(operation, repeat) {
         break;
     }
 
-    editView.setTextCursor(cursor);
+    textEdit.setTextCursor(cursor);
   }
 }
 
