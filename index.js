@@ -20,7 +20,7 @@ var mode = MODE.CMD
 var repeatCount = 0
 
 const enabledCond = {
-  keyValue: () => isEnabled
+  value: () => isEnabled
 }
 
 const keyEventFilter = (event) => {
@@ -90,7 +90,7 @@ function enable() {
 	silkedit.App.on('focusChanged', focusChangedListener);
 
 	const modeCond = {
-	  keyValue: () => toModeText(mode)
+	  value: () => toModeText(mode)
 	}
 
   silkedit.ConditionManager.add("vim.mode", modeCond);
