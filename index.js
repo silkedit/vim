@@ -93,7 +93,7 @@ function enable() {
 	  keyValue: () => toModeText(mode)
 	}
 
-  silkedit.Condition.add("vim.mode", modeCond);
+  silkedit.ConditionManager.add("vim.mode", modeCond);
 
 	mode = MODE.CMD
 	onModeChanged(mode)
@@ -105,7 +105,7 @@ function disable() {
 	silkedit.KeymapManager.removeKeyEventFilter(keyEventFilter);
   silkedit.CommandManager.removeCommandEventFilter(commandEventFilter);
   silkedit.App.removeListener('focusChanged', focusChangedListener);
-  silkedit.Condition.remove("vim.mode");
+  silkedit.ConditionManager.remove("vim.mode");
   const view = silkedit.App.activeTextEdit();
   if (view != null) {
     view.setThinCursor(true)
@@ -234,13 +234,14 @@ function moveCursor(operation, repeat) {
 
 module.exports = {
 	activate: () => {
-    silkedit.Condition.add("vim.enabled", enabledCond);
+    silkedit.ConditionManager.add("vim.enabled", enabledCond);
 		if (silkedit.Config.get('vim.enable_on_startup')) {
 			enable()
 		}
 	}
 
   ,deactivate: () => {
+    silkedit.ConditionManager.remove("vim.enabled");
     disable()
   }
 
